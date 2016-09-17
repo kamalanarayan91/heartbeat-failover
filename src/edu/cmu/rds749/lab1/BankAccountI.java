@@ -15,16 +15,26 @@ public class BankAccountI extends AbstractServer
     private int balance = 0;
     private long serverId = -1;
     private ProxyControl ctl;
+    private String hostName;
+    private int port;
+    private long id;
 
-    public BankAccountI(Configuration config) {
+    public BankAccountI(Configuration config)
+    {
         super(config);
         this.config = config;
+        this.hostName = config.getString("serverHost");
+        this.port = config.getInt("serverPort");
     }
 
-    protected void doStart(ProxyControl ctl) throws Exception {
+    protected void doStart(ProxyControl ctl) throws Exception
+    {
+        this.id = ctl.register(hostName,port);
+
     }
 
-    protected int handleReadBalance() {
+    protected int handleReadBalance()
+    {
         return this.balance;
     }
 
