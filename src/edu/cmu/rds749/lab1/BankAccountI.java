@@ -18,6 +18,40 @@ public class BankAccountI extends AbstractServer
     private String hostName;
     private int port;
     private long id;
+    private HeartBeatSender heartBeatSender;
+    private long heartbeatInterval;
+
+    //HeartBeat Sending thread
+    public class HeartBeatSender implements Runnable {
+
+
+        private AbstractServer.ProxyControl proxy;
+
+        public HeartBeatSender(AbstractServer.ProxyControl proxy)
+        {
+            this.proxy = proxy;
+        }
+
+        @Override
+        public void run(){
+
+            while(true){
+
+                //call the proxy heartbeat
+                Long timestamp = System.currentTimeMillis();
+
+                try
+                {
+                    proxy.heartbeat(id,timestamp);
+                    Thread.sleep(heartbeatInterval);
+                }
+                catch (Exception e){
+
+                }
+            }
+        }
+    }
+
 
     public BankAccountI(Configuration config)
     {
@@ -25,12 +59,17 @@ public class BankAccountI extends AbstractServer
         this.config = config;
         this.hostName = config.getString("serverHost");
         this.port = config.getInt("serverPort");
+        this.heartbeatInterval = config.getLong("heartbeatIntervalMillis");
+
     }
 
     protected void doStart(ProxyControl ctl) throws Exception
     {
         this.id = ctl.register(hostName,port);
-
+        System.err.println("Id:"+id);
+        //start the heartbeat sender thread
+        this.heartBeatSender = new HeartBeatSender(ctl);
+        heartBeatSender.run();
     }
 
     protected int handleReadBalance()

@@ -56,7 +56,7 @@ public class Proxy extends AbstractProxy
     public int changeBalance(int update) throws NoServersAvailable
     {
         System.out.println("(In Proxy)");
-        //for now
+
         //for now
         int result = 0;
         try {
@@ -78,14 +78,26 @@ public class Proxy extends AbstractProxy
         server.setId(generatedId);
 
         serverMap.put(generatedId,server);
-        if(activeServer==null){
+        if(activeServer==null)
+        {
             activeServer = server;
         }
+        else
+        {
+            //active server is not in this list
+            serverList.add(server);
+        }
+
+
+
         return generatedId;
     }
 
+
     public void heartbeat(long ID, long serverTimestamp)
     {
+
+        System.out.println("ID:"+ID + " time:" + serverTimestamp + " thread ID:" + Thread.currentThread().getId()) ;
 
     }
 
@@ -101,8 +113,11 @@ public class Proxy extends AbstractProxy
         Random rand = new Random();
         long randomNumber =rand.nextLong();
         result = hostname.hashCode() + port + randomNumber;
+
         System.err.println("hostName:" + hostname + " port:" + port +" randomNumber:" + randomNumber);
         System.err.println("Id Generated:" + result);
+
+
         return result;
 
     }
