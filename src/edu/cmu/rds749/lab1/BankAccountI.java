@@ -33,7 +33,8 @@ public class BankAccountI extends AbstractServer
         }
 
         @Override
-        public void run(){
+        public void run()
+        {
 
             while(true){
 
@@ -45,7 +46,8 @@ public class BankAccountI extends AbstractServer
                     proxy.heartbeat(id,timestamp);
                     Thread.sleep(heartbeatInterval);
                 }
-                catch (Exception e){
+                catch (Exception e)
+                {
 
                 }
             }

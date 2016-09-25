@@ -11,12 +11,32 @@ public class Server {
     private String hostname;
     private int port;
     private long Id;
+    private long prevTimeStamp;
+    private long timeOutStamp;
     private BankAccountStub serverObject;
+
+    public synchronized long getTimeOutStamp() {
+        return timeOutStamp;
+    }
+
+    public synchronized void setTimeOutStamp(long timeOutStamp) {
+        this.timeOutStamp = timeOutStamp;
+    }
+
+    public synchronized long getPrevTimeStamp() {
+        return prevTimeStamp;
+    }
+
+    public synchronized void setPrevTimeStamp(long prevTimeStamp) {
+        this.prevTimeStamp = prevTimeStamp;
+    }
 
     public Server(String hostname, int port, BankAccountStub serverObject){
         this.hostname = hostname;
         this.port = port;
         this.serverObject = serverObject;
+        this.prevTimeStamp = 0;
+        this.timeOutStamp = 0;
     }
 
     public String getHostname() {
